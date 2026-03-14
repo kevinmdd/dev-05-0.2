@@ -2,7 +2,7 @@ package cs151.application;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-
+// hi
 public class MainController
 {
     @FXML
