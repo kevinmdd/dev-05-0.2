@@ -1,4 +1,5 @@
-module cs151.application {
+module cs151.application
+{
     requires javafx.controls;
     requires javafx.fxml;
 
