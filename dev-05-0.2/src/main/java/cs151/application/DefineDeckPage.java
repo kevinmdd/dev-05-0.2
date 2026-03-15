@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import javafx.fxml.FXMLLoader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ public class DefineDeckPage {
     private Label errorLabel;
 
     public void start(Stage stage) {
-        showDeckList();
+        showForm();
 
         Scene scene = new Scene(root, 700, 500);
         stage.setTitle("Define Deck");
@@ -88,9 +89,16 @@ public class DefineDeckPage {
         Button cancelButton = new Button("Cancel");
         cancelButton.setPrefWidth(90);
         cancelButton.setOnAction(e -> {
-            deckNameField.clear();
-            descriptionArea.clear();
-            showDeckList();
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("HomePage.fxml"));
+                Scene scene = new Scene(loader.load(), 600, 400);
+
+                Stage stage = (Stage) root.getScene().getWindow();
+                stage.setScene(scene);
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         });
 
         HBox buttons = new HBox(12, saveButton, cancelButton);
@@ -128,7 +136,10 @@ public class DefineDeckPage {
         }
 
         decks.add(new Deck(name, description));
-        showDeckList();
+        deckNameField.clear();
+        descriptionArea.clear();
+        errorLabel.setVisible(false);
+        errorLabel.setManaged(false);
     }
 
     private boolean isDuplicate(String name) {
