@@ -1,13 +1,22 @@
-# Name of application: 
-# Version: 0.2
+# Name of application: FlashMaster
 
-# who did what:
-1. Derek Wang: DefineDeckPage
-2. Ngocphuong Pham: HomePageController
-3. Kevin Medina: Project Manager, Deck
+# Who did What
 
+# Version: 0.2:
+1. Kevin Medina: Designed Deck, Revised Project
+2. Ngocphuong Pham: Designed HomePageController
+3. Derek Wang: Designed DefineDeckPage 
 
-# Any other instruction that users need to know:
+# Technical-Spec:
+1. Kevin Medina: Data model, Project manager
+2. Ngocphuong Pham: UML Sequence Diagram
+3. Derek Wang: UML Class Diagram
+
+# Functional-Spec:
+1. Kevin Medina: Mockup 1, Mockup 2
+2. Ngocphuong Pham: Use case 1, Project Manager
+3. Derek Wang: Introduction, Software Overview
+
 
 
 
