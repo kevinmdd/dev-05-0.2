@@ -1,7 +1,7 @@
 package cs151.application;
 
-import javafx.application.Application;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DefineDeckPage extends Application {
+public class DefineDeckPage {
 
     private final List<Deck> decks = new ArrayList<>();
     private final ListView<String> deckListView = new ListView<>();
@@ -20,7 +20,6 @@ public class DefineDeckPage extends Application {
     private TextArea descriptionArea;
     private Label errorLabel;
 
-    @Override
     public void start(Stage stage) {
         showDeckList();
 
@@ -32,52 +31,72 @@ public class DefineDeckPage extends Application {
 
     private void showDeckList() {
         Label title = new Label("Define Deck");
-        Button createButton = new Button("Create");
+        title.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
+
+        Button createButton = new Button("Create Deck");
+        createButton.setPrefWidth(120);
         createButton.setOnAction(e -> showForm());
 
-        HBox top = new HBox(10, title, createButton);
-        top.setPadding(new Insets(10));
+        VBox header = new VBox(12, title, createButton);
+        header.setAlignment(Pos.CENTER);
+        header.setPadding(new Insets(25, 20, 15, 20));
 
         refreshDeckList();
+        deckListView.setMaxWidth(450);
+        deckListView.setPrefHeight(260);
 
-        root.setTop(top);
-        root.setCenter(deckListView);
+        VBox centerBox = new VBox(deckListView);
+        centerBox.setAlignment(Pos.CENTER);
+        centerBox.setPadding(new Insets(10, 20, 30, 20));
+
+        root.setTop(header);
+        root.setCenter(centerBox);
     }
 
     private void refreshDeckList() {
         deckListView.getItems().clear();
         for (Deck deck : decks) {
-            deckListView.getItems().add(deck.name + (deck.description.isBlank() ? "" : " - " + deck.description));
+            String name = deck.getName();
+            String description = deck.getDescription();
+            deckListView.getItems().add(name + (description.isBlank() ? "" : " - " + description));
         }
     }
 
     private void showForm() {
         Label title = new Label("Create New Deck");
+        title.setStyle("-fx-font-size: 22px; -fx-font-weight: bold;");
 
         deckNameField = new TextField();
         deckNameField.setPromptText("Deck Name (required)");
+        deckNameField.setMaxWidth(320);
 
         descriptionArea = new TextArea();
         descriptionArea.setPromptText("Description (optional)");
         descriptionArea.setPrefRowCount(4);
+        descriptionArea.setMaxWidth(320);
+        descriptionArea.setWrapText(true);
 
-        errorLabel = new Label("Deck Name must be unique and cannot be empty.");
+        errorLabel = new Label("Deck name must be unique and cannot be empty.");
+        errorLabel.setStyle("-fx-text-fill: red;");
         errorLabel.setVisible(false);
         errorLabel.setManaged(false);
 
         Button saveButton = new Button("Save");
+        saveButton.setPrefWidth(90);
         saveButton.setOnAction(e -> saveDeck());
 
         Button cancelButton = new Button("Cancel");
+        cancelButton.setPrefWidth(90);
         cancelButton.setOnAction(e -> {
             deckNameField.clear();
             descriptionArea.clear();
             showDeckList();
         });
 
-        HBox buttons = new HBox(10, saveButton, cancelButton);
+        HBox buttons = new HBox(12, saveButton, cancelButton);
+        buttons.setAlignment(Pos.CENTER);
 
-        VBox form = new VBox(10,
+        VBox form = new VBox(12,
                 title,
                 new Label("Deck Name *"),
                 deckNameField,
@@ -86,10 +105,16 @@ public class DefineDeckPage extends Application {
                 errorLabel,
                 buttons
         );
-        form.setPadding(new Insets(10));
+        form.setAlignment(Pos.CENTER);
+        form.setPadding(new Insets(30));
+        form.setMaxWidth(420);
+
+        VBox wrapper = new VBox(form);
+        wrapper.setAlignment(Pos.CENTER);
+        wrapper.setPadding(new Insets(20));
 
         root.setTop(null);
-        root.setCenter(form);
+        root.setCenter(wrapper);
     }
 
     private void saveDeck() {
@@ -108,24 +133,10 @@ public class DefineDeckPage extends Application {
 
     private boolean isDuplicate(String name) {
         for (Deck deck : decks) {
-            if (deck.name.equalsIgnoreCase(name)) {
+            if (deck.getName().equalsIgnoreCase(name)) {
                 return true;
             }
         }
         return false;
-    }
-
-    public static void main(String[] args) {
-        launch(args);
-    }
-
-    static class Deck {
-        String name;
-        String description;
-
-        Deck(String name, String description) {
-            this.name = name;
-            this.description = description;
-        }
     }
 }
