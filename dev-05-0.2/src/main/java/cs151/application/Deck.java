@@ -25,6 +25,4 @@ public class Deck {
     {
         this.description = description;
     }
-
-
 }
