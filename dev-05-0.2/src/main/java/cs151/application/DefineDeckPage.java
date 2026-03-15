@@ -11,6 +11,12 @@ import javafx.fxml.FXMLLoader;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents the page used to create and manage flashcard decks.
+ *
+ * This class allows the user to define new decks by entering a
+ * deck name and optional description.
+ */
 public class DefineDeckPage {
 
     private final List<Deck> decks = new ArrayList<>();
@@ -20,7 +26,11 @@ public class DefineDeckPage {
     private TextField deckNameField;
     private TextArea descriptionArea;
     private Label errorLabel;
-
+    /**
+     * Starts the Define Deck page and displays it on the provided stage.
+     *
+     * @param stage the stage used to display the page
+     */
     public void start(Stage stage) {
         showForm();
 
@@ -30,6 +40,9 @@ public class DefineDeckPage {
         stage.show();
     }
 
+    /**
+     * Displays the deck list interface showing all created decks.
+     */
     private void showDeckList() {
         Label title = new Label("Define Deck");
         title.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
@@ -54,6 +67,9 @@ public class DefineDeckPage {
         root.setCenter(centerBox);
     }
 
+    /**
+     * Refreshes the deck list display to reflect the current decks.
+     */
     private void refreshDeckList() {
         deckListView.getItems().clear();
         for (Deck deck : decks) {
@@ -63,6 +79,9 @@ public class DefineDeckPage {
         }
     }
 
+    /**
+     * Displays the form used to create a new deck.
+     */
     private void showForm() {
         Label title = new Label("Create New Deck");
         title.setStyle("-fx-font-size: 22px; -fx-font-weight: bold;");
@@ -86,9 +105,9 @@ public class DefineDeckPage {
         saveButton.setPrefWidth(90);
         saveButton.setOnAction(e -> saveDeck());
 
-        Button cancelButton = new Button("Cancel");
-        cancelButton.setPrefWidth(90);
-        cancelButton.setOnAction(e -> {
+        Button BackButton = new Button("Back");
+        BackButton.setPrefWidth(90);
+        BackButton.setOnAction(e -> {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("HomePage.fxml"));
                 Scene scene = new Scene(loader.load(), 600, 400);
@@ -101,7 +120,7 @@ public class DefineDeckPage {
             }
         });
 
-        HBox buttons = new HBox(12, saveButton, cancelButton);
+        HBox buttons = new HBox(12, saveButton, BackButton);
         buttons.setAlignment(Pos.CENTER);
 
         VBox form = new VBox(12,
@@ -125,6 +144,9 @@ public class DefineDeckPage {
         root.setCenter(wrapper);
     }
 
+    /**
+     * Saves a newly created deck if the name is valid and not duplicated.
+     */
     private void saveDeck() {
         String name = deckNameField.getText() == null ? "" : deckNameField.getText().trim();
         String description = descriptionArea.getText() == null ? "" : descriptionArea.getText().trim();
@@ -142,6 +164,12 @@ public class DefineDeckPage {
         errorLabel.setManaged(false);
     }
 
+    /**
+     * Checks if a deck with the same name already exists.
+     *
+     * @param name the deck name to check
+     * @return true if the deck name already exists, false otherwise
+     */
     private boolean isDuplicate(String name) {
         for (Deck deck : decks) {
             if (deck.getName().equalsIgnoreCase(name)) {
@@ -150,4 +178,6 @@ public class DefineDeckPage {
         }
         return false;
     }
+
+
 }

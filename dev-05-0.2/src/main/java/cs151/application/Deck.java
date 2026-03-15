@@ -1,5 +1,9 @@
 package cs151.application;
-
+/**
+ * Deck class for future implementation
+ *
+ * Currently unused.
+ */
 public class Deck {
     private String name;
     private String description;
