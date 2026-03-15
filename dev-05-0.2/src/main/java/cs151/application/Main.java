@@ -14,8 +14,8 @@ public class Main extends Application
     public void start(Stage stage) throws IOException
     {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("hello-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
-        stage.setTitle("CS151 JavaFX App");
+        Scene scene = new Scene(fxmlLoader.load(), 800, 600);
+        stage.setTitle("Flash Master");
         stage.setScene(scene);
         stage.show();
     }
