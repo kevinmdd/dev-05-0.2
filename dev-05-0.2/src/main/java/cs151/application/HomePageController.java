@@ -36,12 +36,22 @@ public class HomePageController
             e.printStackTrace();
         }
     }
+
+
     /**
      * Handles the View Decks button click.
      */
     @FXML
-    private void handleViewDecks()
+    private void handleViewDecks(ActionEvent event)
     {
-        System.out.println("View existing decks clicked");
+        try {
+            Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+
+            ViewDecksPage viewDecksPage = new ViewDecksPage();
+            viewDecksPage.start(stage);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

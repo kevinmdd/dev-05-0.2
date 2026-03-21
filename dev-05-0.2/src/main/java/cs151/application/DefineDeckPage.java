@@ -7,7 +7,9 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
-
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +21,7 @@ import java.util.List;
  */
 public class DefineDeckPage {
 
-    private final List<Deck> decks = new ArrayList<>();
+    private List<Deck> decks = new ArrayList<>();
     private final ListView<String> deckListView = new ListView<>();
     private final BorderPane root = new BorderPane();
 
@@ -32,6 +34,7 @@ public class DefineDeckPage {
      * @param stage the stage used to display the page
      */
     public void start(Stage stage) {
+        decks = DeckStorage.load();
         showForm();
 
         Scene scene = new Scene(root, 700, 500);
@@ -103,7 +106,13 @@ public class DefineDeckPage {
 
         Button saveButton = new Button("Save");
         saveButton.setPrefWidth(90);
-        saveButton.setOnAction(e -> saveDeck());
+        saveButton.setOnAction(e -> {
+            try {
+                saveDeck();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
 
         Button BackButton = new Button("Back");
         BackButton.setPrefWidth(90);
@@ -142,12 +151,13 @@ public class DefineDeckPage {
 
         root.setTop(null);
         root.setCenter(wrapper);
+
     }
 
     /**
      * Saves a newly created deck if the name is valid and not duplicated.
      */
-    private void saveDeck() {
+    private void saveDeck() throws IOException {
         String name = deckNameField.getText() == null ? "" : deckNameField.getText().trim();
         String description = descriptionArea.getText() == null ? "" : descriptionArea.getText().trim();
 
@@ -158,6 +168,9 @@ public class DefineDeckPage {
         }
 
         decks.add(new Deck(name, description));
+
+        DeckStorage.save(decks); // ← clean separation
+
         deckNameField.clear();
         descriptionArea.clear();
         errorLabel.setVisible(false);
@@ -178,6 +191,5 @@ public class DefineDeckPage {
         }
         return false;
     }
-
 
 }
