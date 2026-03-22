@@ -2,6 +2,11 @@
 
 # Who did What
 
+# Version: 0.4:
+1. Kevin Medina: Designed ViewDecksPage
+2. Ngocphuong Pham: Designed DeckStorage, Updated ReadMe
+3. Derek Wang: Updated DefineDeckPage
+
 # Version: 0.2:
 1. Kevin Medina: Designed Deck, Revised Project
 2. Ngocphuong Pham: Designed HomePageController
