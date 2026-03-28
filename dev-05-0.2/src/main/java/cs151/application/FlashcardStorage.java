@@ -1,9 +1,10 @@
 package cs151.application;
 
 import java.io.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class FlashcardStorage {
 
@@ -54,8 +55,8 @@ public class FlashcardStorage {
                 String front = parts[1];
                 String back = parts[2];
                 String status = parts[3];
-                LocalDate creationDate = LocalDate.parse(parts[4]);
-                LocalDate lastReviewDate = LocalDate.parse(parts[5]);
+                LocalDateTime creationDate = LocalDateTime.parse(parts[4]);
+                LocalDateTime lastReviewDate = LocalDateTime.parse(parts[5]);
 
                 Deck matchedDeck = null;
                 for (Deck d : decks) {
