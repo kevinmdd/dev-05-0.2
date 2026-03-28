@@ -2,6 +2,11 @@
 
 # Who did What
 
+# Version: 0.5:
+1. Kevin Medina: Designed FlashcardStorage, Flashcard
+2. Ngocphuong Pham: Designed DefineFlashcardPage, ViewFlashcardsPage
+3. Derek Wang: Submitted ZIP File
+
 # Version: 0.4:
 1. Kevin Medina: Designed ViewDecksPage
 2. Ngocphuong Pham: Designed DeckStorage, Updated ReadMe
