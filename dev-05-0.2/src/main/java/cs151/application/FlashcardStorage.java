@@ -17,8 +17,12 @@ public class FlashcardStorage {
 
             for (Flashcard flashcard : flashcards) {
                 String deckName = flashcard.getDeck().getName().replace(",", " ");
-                String front = flashcard.getFrontText().replace(",", " ");
-                String back = flashcard.getBackText().replace(",", " ");
+                String front = flashcard.getFrontText().replace(",", " ")
+                        .replace("\n", " ")
+                        .replace("\r", " ");
+                String back = flashcard.getBackText().replace(",", " ")
+                        .replace("\n", " ")
+                        .replace("\r", " ");
                 String status = flashcard.getStatus().replace(",", " ");
                 String creationDate = flashcard.getCreationDate().toString();
                 String lastReviewDate = flashcard.getLastReviewDate().toString();

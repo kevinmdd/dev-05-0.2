@@ -16,7 +16,9 @@ public class DeckStorage
             for (Deck deck: decks)
             {
                 String name = deck.getName().replace(",", " ");
-                String description = deck.getDescription().replace(",", " ");
+                String description = deck.getDescription().replace(",", " ")
+                        .replace("\n", " ")
+                        .replace("\r", " ");
                 writer.println(name + "," + description);
             }
         }
