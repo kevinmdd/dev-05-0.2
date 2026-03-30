@@ -1,5 +1,4 @@
 Deck,Front,Back,Status,CreationDate,LastReviewDate
 CS151,Abstraction,The ability of separating an interface from implementation.,New,2026-03-28T01:56:27.685029,2026-03-28T01:56:27.685029
 CS154,Set,A collection of objects (aka elements).,New,2026-03-28T01:56:44.115464,2026-03-28T01:56:44.115464
-MATH39,Vector,An ordered list of numbers (components) representing a point of direction in n-dimensional space.,New,2026-03-28T01:57:12.453639,2026-03-28T01:57:12.453639
 MATH39,Matrix,A rectangular array of numbers  symbols  or expressions arranged in rows and columns.,New,2026-03-28T01:57:43.982586,2026-03-28T01:57:43.982586
