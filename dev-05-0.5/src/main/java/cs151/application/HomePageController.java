@@ -65,4 +65,18 @@ public class HomePageController
             e.printStackTrace();
         }
     }
+
+    @FXML
+    private void handleSearchFlashcards(ActionEvent event)
+    {
+        try {
+            Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+
+            SearchFlashcardsPage searchFlashcardsPage = new SearchFlashcardsPage();
+            searchFlashcardsPage.start(stage);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -28,8 +28,13 @@
             prefWidth="220"
             onAction="#handleViewDecks"/>
 
-    <Button text="Create Flashcard" onAction="#handleCreateFlashcard" />
+    <Button text="Create Flashcard"
+            onAction="#handleCreateFlashcard" />
 
-    <Button text="View Flashcards" onAction="#handleViewFlashcards" />
+    <Button text="View Flashcards"
+            onAction="#handleViewFlashcards" />
+
+    <Button text="Search Flashcards"
+            onAction="#handleSearchFlashcards" />
 
 </VBox>

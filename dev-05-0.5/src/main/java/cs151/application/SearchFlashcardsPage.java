@@ -3,6 +3,7 @@ package cs151.application;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -24,13 +25,36 @@ public class SearchFlashcardsPage
         List<Flashcard> flashcards = FlashcardStorage.load();
         data = FXCollections.observableArrayList(flashcards);
 
-        // Search field (just made the UI)
         TextField searchField = new TextField();
         searchField.setPromptText("Search flashcards...");
         searchField.setMaxWidth(400);
 
-        // add filter logic
-        // add listener, filter flashcards, case insensitive, update dynamically
+        // FILTER LOGIC
+        FilteredList<Flashcard> filteredData = new FilteredList<>(data, flashcard -> true);
+
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            String searchText = newValue == null ? "" : newValue.trim().toLowerCase();
+
+            filteredData.setPredicate(flashcard -> {
+                if (searchText.isEmpty()) {
+                    return true;
+                }
+
+                String deckName = flashcard.getDeck().getName().toLowerCase();
+                String frontText = flashcard.getFrontText().toLowerCase();
+                String backText = flashcard.getBackText().toLowerCase();
+                String status = flashcard.getStatus().toLowerCase();
+                String creationDate = flashcard.getCreationDate().toString().toLowerCase();
+                String reviewDate = flashcard.getLastReviewDate().toString().toLowerCase();
+
+                return deckName.contains(searchText)
+                        || frontText.contains(searchText)
+                        || backText.contains(searchText)
+                        || status.contains(searchText)
+                        || creationDate.contains(searchText)
+                        || reviewDate.contains(searchText);
+            });
+        });
 
         // Table Columns
         TableColumn<Flashcard, String> deckCol = new TableColumn<>("Deck");
@@ -39,11 +63,11 @@ public class SearchFlashcardsPage
 
         TableColumn<Flashcard, String> frontCol = new TableColumn<>("Front Text");
         frontCol.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getFrontText()));
+                new SimpleStringProperty(firstLine(cellData.getValue().getFrontText())));
 
         TableColumn<Flashcard, String> backCol = new TableColumn<>("Back Text");
         backCol.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getBackText()));
+                new SimpleStringProperty(firstLine(cellData.getValue().getBackText())));
 
         TableColumn<Flashcard, String> statusCol = new TableColumn<>("Status");
         statusCol.setCellValueFactory(cellData ->
@@ -57,11 +81,9 @@ public class SearchFlashcardsPage
         reviewCol.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getLastReviewDate().toString()));
 
-        // format text, show just first line of front and back text
-        // sorting and maybe a message saying it doesnt work
-
-        // Set data (no filtering yet)
-        table.setItems(data);
+        // Use filtered data in the table
+        table.setItems(filteredData);
+        table.getColumns().clear();
         table.getColumns().addAll(deckCol, frontCol, backCol, statusCol, creationCol, reviewCol);
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
@@ -79,6 +101,16 @@ public class SearchFlashcardsPage
         stage.setScene(scene);
         stage.setTitle("Search Flashcards");
         stage.show();
+    }
+
+    private String firstLine(String text)
+    {
+        if (text == null || text.isBlank()) {
+            return "";
+        }
+
+        String[] lines = text.split("\\R", 2);
+        return lines[0];
     }
 
     private void goBack(Stage stage)
