@@ -12,6 +12,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 
+import java.io.IOException;
 import java.util.List;
 
 public class SearchFlashcardsPage
@@ -80,7 +81,8 @@ public class SearchFlashcardsPage
         TableColumn<Flashcard, String> reviewCol = new TableColumn<>("Last Review Date");
         reviewCol.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getLastReviewDate().toString()));
-
+        
+        
         // Use filtered data in the table
         table.setItems(filteredData);
         table.getColumns().clear();
@@ -93,7 +95,32 @@ public class SearchFlashcardsPage
         Button backBtn = new Button("Back");
         backBtn.setOnAction(e -> goBack(stage));
 
-        VBox layout = new VBox(15, title, searchField, table, backBtn);
+        Button deleteBtn = new Button("Delete Flashcard");
+        deleteBtn.setOnAction(e -> {
+            Flashcard selectedFlashcard = table.getSelectionModel().getSelectedItem();
+
+            if (selectedFlashcard == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setHeaderText(null);
+            alert.setContentText("Please select a flashcard to delete.");
+            alert.showAndWait();
+            return;
+            }
+
+            data.remove(selectedFlashcard);           // removes from table
+            try {
+                FlashcardStorage.save(data);
+            } catch (IOException ex) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Save Error");
+                alert.setHeaderText(null);
+                alert.setContentText("Could not save flashcards.");
+                alert.showAndWait();
+                ex.printStackTrace();
+    }
+        });
+
+        VBox layout = new VBox(15, title, searchField, table, backBtn, deleteBtn);
         layout.setAlignment(Pos.CENTER);
         layout.setPadding(new Insets(20));
 
@@ -102,6 +129,8 @@ public class SearchFlashcardsPage
         stage.setTitle("Search Flashcards");
         stage.show();
     }
+
+    
 
     private String firstLine(String text)
     {

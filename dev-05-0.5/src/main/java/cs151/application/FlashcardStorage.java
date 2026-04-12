@@ -89,4 +89,15 @@ public class FlashcardStorage {
 
         return flashcards;
     }
+    
+    public static void delete(Flashcard targetFlashcard) throws IOException {
+    List<Flashcard> flashcards = load();
+
+    flashcards.removeIf(flashcard ->
+            flashcard.getDeck().getName().equalsIgnoreCase(targetFlashcard.getDeck().getName()) &&
+            flashcard.getFrontText().equalsIgnoreCase(targetFlashcard.getFrontText()) &&
+            flashcard.getBackText().equalsIgnoreCase(targetFlashcard.getBackText()));
+
+    save(flashcards);
+}
 }
