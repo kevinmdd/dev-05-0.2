@@ -107,7 +107,8 @@ public class SearchFlashcardsPage
             return;
             }
 
-            data.remove(selectedFlashcard);           // removes from table
+            data.remove(selectedFlashcard);
+            table.refresh(); // removes from table
             try {
                 FlashcardStorage.save(data);
             } catch (IOException ex) {
@@ -121,7 +122,7 @@ public class SearchFlashcardsPage
         });
 
         VBox layout = new VBox(15, title, searchField, table, backBtn, deleteBtn);
-        layout.setAlignment(Pos.CENTER);
+        layout.setAlignment(Pos.TOP_CENTER);
         layout.setPadding(new Insets(20));
 
         Scene scene = new Scene(layout, 1000, 500);

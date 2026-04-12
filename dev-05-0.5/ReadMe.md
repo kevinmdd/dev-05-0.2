@@ -3,8 +3,8 @@
 # Who did What
 
 # Version: 0.6:
-1. Kevin Medina:
-2. Ngocphuong Pham:
+1. Kevin Medina: Designed search UI 
+2. Ngocphuong Pham: Designed filtering functionality
 3. Derek Wang: Designed delete functionality
 
 # Version: 0.5:

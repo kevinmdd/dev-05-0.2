@@ -1,4 +1,4 @@
 Deck,Front,Back,Status,CreationDate,LastReviewDate
-CS151,Abstraction,The ability of separating an interface from implementation.,New,2026-03-28T01:56:27.685029,2026-03-28T01:56:27.685029
 CS154,Set,A collection of objects (aka elements).,New,2026-03-28T01:56:44.115464,2026-03-28T01:56:44.115464
-MATH39,Matrix,A rectangular array of numbers  symbols  or expressions arranged in rows and columns.,New,2026-03-28T01:57:43.982586,2026-03-28T01:57:43.982586
+CS151,Encapsulation,Bundle attributes and behaviors within a class and control their visibility from the outside world,Learning,2026-04-11T22:28:40.098446700,2026-04-11T22:28:40.098446700
+MATH39,Determinant,A scalar value calculated from a square matrix that provides crucial information about the matrix  such as whether it is invertible or how it scales space,Mastered,2026-04-11T22:30:02.658181700,2026-04-11T22:30:02.658181700
