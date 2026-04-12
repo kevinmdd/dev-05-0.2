@@ -2,6 +2,11 @@
 
 # Who did What
 
+# Version: 0.6:
+1. Kevin Medina:
+2. Ngocphuong Pham:
+3. Derek Wang: Designed delete functionality
+
 # Version: 0.5:
 1. Kevin Medina: Designed FlashcardStorage, Flashcard
 2. Ngocphuong Pham: Designed DefineFlashcardPage, ViewFlashcardsPage
