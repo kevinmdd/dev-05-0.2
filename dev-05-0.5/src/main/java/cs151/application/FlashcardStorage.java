@@ -99,5 +99,27 @@ public class FlashcardStorage {
             flashcard.getBackText().equalsIgnoreCase(targetFlashcard.getBackText()));
 
     save(flashcards);
+
+
 }
+    public static void deleteByDeck(String deckName) throws IOException {
+        List<Flashcard> flashcards = load();
+
+        flashcards.removeIf(flashcard ->
+                flashcard.getDeck().getName().equalsIgnoreCase(deckName));
+
+        save(flashcards);
+    }
+
+    public static void updateDeckReference(String oldDeckName, Deck updatedDeck) throws IOException {
+        List<Flashcard> flashcards = load();
+
+        for (Flashcard flashcard : flashcards) {
+            if (flashcard.getDeck().getName().equalsIgnoreCase(oldDeckName)) {
+                flashcard.setDeck(updatedDeck);
+            }
+        }
+
+        save(flashcards);
+    }
 }
