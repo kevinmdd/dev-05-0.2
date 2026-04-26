@@ -9,6 +9,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 
@@ -22,7 +23,6 @@ public class SearchFlashcardsPage
 
     public void start(Stage stage)
     {
-        // Load all flashcards
         List<Flashcard> flashcards = FlashcardStorage.load();
         data = FXCollections.observableArrayList(flashcards);
 
@@ -30,98 +30,98 @@ public class SearchFlashcardsPage
         searchField.setPromptText("Search flashcards...");
         searchField.setMaxWidth(400);
 
-        // FILTER LOGIC
-        FilteredList<Flashcard> filteredData = new FilteredList<>(data, flashcard -> true);
+        // FILTER
+        FilteredList<Flashcard> filteredData = new FilteredList<>(data, f -> true);
 
-        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-            String searchText = newValue == null ? "" : newValue.trim().toLowerCase();
+        searchField.textProperty().addListener((obs, oldVal, newVal) -> {
+            String text = newVal == null ? "" : newVal.trim().toLowerCase();
 
-            filteredData.setPredicate(flashcard -> {
-                if (searchText.isEmpty()) {
-                    return true;
-                }
+            filteredData.setPredicate(f -> {
+                if (text.isEmpty()) return true;
 
-                String deckName = flashcard.getDeck().getName().toLowerCase();
-                String frontText = flashcard.getFrontText().toLowerCase();
-                String backText = flashcard.getBackText().toLowerCase();
-                String status = flashcard.getStatus().toLowerCase();
-                String creationDate = flashcard.getCreationDate().toString().toLowerCase();
-                String reviewDate = flashcard.getLastReviewDate().toString().toLowerCase();
-
-                return deckName.contains(searchText)
-                        || frontText.contains(searchText)
-                        || backText.contains(searchText)
-                        || status.contains(searchText)
-                        || creationDate.contains(searchText)
-                        || reviewDate.contains(searchText);
+                return f.getDeck().getName().toLowerCase().contains(text)
+                        || f.getFrontText().toLowerCase().contains(text)
+                        || f.getBackText().toLowerCase().contains(text)
+                        || f.getStatus().toLowerCase().contains(text)
+                        || f.getCreationDate().toString().toLowerCase().contains(text)
+                        || f.getLastReviewDate().toString().toLowerCase().contains(text);
             });
         });
 
-        // Table Columns
+        // COLUMNS
         TableColumn<Flashcard, String> deckCol = new TableColumn<>("Deck");
-        deckCol.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getDeck().getName()));
+        deckCol.setCellValueFactory(c ->
+                new SimpleStringProperty(c.getValue().getDeck().getName()));
 
         TableColumn<Flashcard, String> frontCol = new TableColumn<>("Front Text");
-        frontCol.setCellValueFactory(cellData ->
-                new SimpleStringProperty(firstLine(cellData.getValue().getFrontText())));
+        frontCol.setCellValueFactory(c ->
+                new SimpleStringProperty(firstLine(c.getValue().getFrontText())));
 
         TableColumn<Flashcard, String> backCol = new TableColumn<>("Back Text");
-        backCol.setCellValueFactory(cellData ->
-                new SimpleStringProperty(firstLine(cellData.getValue().getBackText())));
+        backCol.setCellValueFactory(c ->
+                new SimpleStringProperty(firstLine(c.getValue().getBackText())));
 
         TableColumn<Flashcard, String> statusCol = new TableColumn<>("Status");
-        statusCol.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getStatus()));
+        statusCol.setCellValueFactory(c ->
+                new SimpleStringProperty(c.getValue().getStatus()));
 
         TableColumn<Flashcard, String> creationCol = new TableColumn<>("Creation Date");
-        creationCol.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getCreationDate().toString()));
+        creationCol.setCellValueFactory(c ->
+                new SimpleStringProperty(c.getValue().getCreationDate().toString()));
 
         TableColumn<Flashcard, String> reviewCol = new TableColumn<>("Last Review Date");
-        reviewCol.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getLastReviewDate().toString()));
-        
-        
-        // Use filtered data in the table
+        reviewCol.setCellValueFactory(c ->
+                new SimpleStringProperty(c.getValue().getLastReviewDate().toString()));
+
         table.setItems(filteredData);
-        table.getColumns().clear();
         table.getColumns().addAll(deckCol, frontCol, backCol, statusCol, creationCol, reviewCol);
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        // BUTTONS
+        Button editBtn = new Button("Edit Flashcard");
+        Button deleteBtn = new Button("Delete Flashcard");
+        Button backBtn = new Button("Back");
+
+        // EDIT BUTTON
+        editBtn.setOnAction(e -> {
+            Flashcard selected = table.getSelectionModel().getSelectedItem();
+
+            if (selected == null) {
+                showAlert("Please select a flashcard to edit.");
+                return;
+            }
+
+            showEditDialog(selected);
+        });
+
+        // DELETE BUTTON (FIXED)
+        deleteBtn.setOnAction(e -> {
+            Flashcard selected = table.getSelectionModel().getSelectedItem();
+
+            if (selected == null) {
+                showAlert("Please select a flashcard to delete.");
+                return;
+            }
+
+            try {
+                FlashcardStorage.delete(selected);
+                data.remove(selected);
+            } catch (IOException ex) {
+                showAlert("Could not delete flashcard.");
+                ex.printStackTrace();
+            }
+        });
+
+        // BACK
+        backBtn.setOnAction(e -> goBack(stage));
+
+        HBox actionButtons = new HBox(10, editBtn, deleteBtn);
+        actionButtons.setAlignment(Pos.CENTER);
 
         Label title = new Label("Search Flashcards");
         title.setStyle("-fx-font-size: 22px; -fx-font-weight: bold;");
 
-        Button backBtn = new Button("Back");
-        backBtn.setOnAction(e -> goBack(stage));
-
-        Button deleteBtn = new Button("Delete Flashcard");
-        deleteBtn.setOnAction(e -> {
-            Flashcard selectedFlashcard = table.getSelectionModel().getSelectedItem();
-
-            if (selectedFlashcard == null) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setHeaderText(null);
-            alert.setContentText("Please select a flashcard to delete.");
-            alert.showAndWait();
-            return;
-            }
-
-            data.remove(selectedFlashcard);
-            table.refresh(); // removes from table
-            try {
-                FlashcardStorage.save(data);
-            } catch (IOException ex) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Save Error");
-                alert.setHeaderText(null);
-                alert.setContentText("Could not save flashcards.");
-                alert.showAndWait();
-                ex.printStackTrace();
-    }
-        });
-
-        VBox layout = new VBox(15, title, searchField, table, backBtn, deleteBtn);
+        VBox layout = new VBox(15, title, searchField, table, actionButtons, backBtn);
         layout.setAlignment(Pos.TOP_CENTER);
         layout.setPadding(new Insets(20));
 
@@ -131,16 +131,94 @@ public class SearchFlashcardsPage
         stage.show();
     }
 
-    
-
-    private String firstLine(String text)
+    // EDIT DIALOG
+    private void showEditDialog(Flashcard flashcard)
     {
-        if (text == null || text.isBlank()) {
-            return "";
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Edit Flashcard");
+
+        TextArea frontField = new TextArea(flashcard.getFrontText());
+        TextArea backField = new TextArea(flashcard.getBackText());
+
+        ComboBox<String> statusBox = new ComboBox<>();
+        statusBox.getItems().addAll(
+                Flashcard.STATUS_NEW,
+                Flashcard.STATUS_LEARNING,
+                Flashcard.STATUS_MASTERED
+        );
+        statusBox.setValue(flashcard.getStatus());
+
+        VBox content = new VBox(10,
+                new Label("Front Text"),
+                frontField,
+                new Label("Back Text"),
+                backField,
+                new Label("Status"),
+                statusBox
+        );
+
+        dialog.getDialogPane().setContent(content);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+        dialog.showAndWait().ifPresent(result -> {
+            if (result == ButtonType.OK) {
+                updateFlashcard(flashcard,
+                        frontField.getText(),
+                        backField.getText(),
+                        statusBox.getValue());
+            }
+        });
+    }
+
+    // UPDATE LOGIC
+    private void updateFlashcard(Flashcard flashcard, String newFront, String newBack, String newStatus)
+    {
+        newFront = newFront == null ? "" : newFront.trim();
+        newBack = newBack == null ? "" : newBack.trim();
+
+        if (newFront.isEmpty() || newBack.isEmpty()) {
+            showAlert("Front and Back cannot be empty.");
+            return;
         }
 
-        String[] lines = text.split("\\R", 2);
-        return lines[0];
+        // DUPLICATE CHECK
+        for (Flashcard f : data) {
+            if (f != flashcard &&
+                    f.getDeck().getName().equalsIgnoreCase(flashcard.getDeck().getName()) &&
+                    f.getFrontText().trim().equalsIgnoreCase(newFront)) {
+
+                showAlert("Front Text must be unique within the same deck.");
+                return;
+            }
+        }
+
+        flashcard.setFrontText(newFront);
+        flashcard.setBackText(newBack);
+        flashcard.setStatus(newStatus);
+        flashcard.updateLastReviewDate();
+
+        try {
+            FlashcardStorage.save(data);
+            table.refresh();
+        } catch (IOException e) {
+            showAlert("Failed to save changes.");
+            e.printStackTrace();
+        }
+    }
+
+    // FIRST LINE ONLY
+    private String firstLine(String text)
+    {
+        if (text == null || text.isBlank()) return "";
+        return text.split("\\R", 2)[0];
+    }
+
+    private void showAlert(String message)
+    {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     private void goBack(Stage stage)
