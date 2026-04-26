@@ -5,7 +5,7 @@
 # Version: 0.7:
 1. Kevin Medina: Item 4 
 2. Ngocphuong Pham: Edited Deck's Actions; Deck delete and add
-3. Derek Wang: 
+3. Derek Wang: Populated Flashcards and cleaned up code and submit
 
 # Version: 0.6:
 1. Kevin Medina: Designed search UI 
