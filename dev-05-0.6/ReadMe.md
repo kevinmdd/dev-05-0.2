@@ -3,7 +3,7 @@
 # Who did What
 
 # Version: 0.7:
-1. Kevin Medina:
+1. Kevin Medina: Item 4 
 2. Ngocphuong Pham: Edited Deck's Actions; Deck delete and add
 3. Derek Wang: 
 
