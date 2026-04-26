@@ -2,6 +2,11 @@
 
 # Who did What
 
+# Version: 0.7:
+1. Kevin Medina:
+2. Ngocphuong Pham: Edited Deck's Actions; Deck delete and add
+3. Derek Wang: 
+
 # Version: 0.6:
 1. Kevin Medina: Designed search UI 
 2. Ngocphuong Pham: Designed filtering functionality
