@@ -79,4 +79,18 @@ public class HomePageController
             e.printStackTrace();
         }
     }
+
+    @FXML
+    private void handleReviewFlashcards(ActionEvent event)
+    {
+        try {
+            Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+
+            ReviewFlashcardPage page = new ReviewFlashcardPage();
+            page.start(stage);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

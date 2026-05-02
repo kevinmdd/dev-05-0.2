@@ -37,4 +37,7 @@
     <Button text="Search Flashcards"
             onAction="#handleSearchFlashcards" />
 
+    <Button text="Review Flashcards"
+            onAction="#handleReviewFlashcards"/>
+
 </VBox>
