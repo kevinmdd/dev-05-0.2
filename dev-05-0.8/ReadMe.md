@@ -3,7 +3,7 @@
 # Who did What
 
 # Version: 0.8:
-1. Kevin Medina:
+1. Kevin Medina: Bug fixes, Updated Readme
 2. Ngocphuong Pham: Added ReviewFlashcardPage
 3. Derek Wang: Populated Flashcards, bug fixes, and cleaned up git repo
 
