@@ -2,6 +2,11 @@
 
 # Who did What
 
+# Version: 0.8:
+1. Kevin Medina:
+2. Ngocphuong Pham: Added ReviewFlashcardPage
+3. Derek Wang: Populated Flashcards, bug fixes, and cleaned up git repo
+
 # Version: 0.7:
 1. Kevin Medina: Item 4 
 2. Ngocphuong Pham: Edited Deck's Actions; Deck delete and add
