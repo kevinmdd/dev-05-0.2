@@ -22,9 +22,13 @@ public class ReviewFlashcardPage {
     private List<Flashcard> filteredFlashcards = new ArrayList<>();
     private int currentIndex = 0;
 
+    private final DeckStorage deckStorage = new DeckStorage();
+    private final FlashcardStorage flashcardStorage = new FlashcardStorage();
+
+
     public void start(Stage stage) {
-        decks = DeckStorage.load();
-        allFlashcards = FlashcardStorage.load();
+        decks = deckStorage.load();
+        allFlashcards = flashcardStorage.load();
 
         showReviewPage(stage);
     }
@@ -145,7 +149,7 @@ public class ReviewFlashcardPage {
             f.updateLastReviewDate();
 
             try {
-                FlashcardStorage.save(allFlashcards);
+                flashcardStorage.save(allFlashcards);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }

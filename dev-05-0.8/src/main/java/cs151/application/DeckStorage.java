@@ -4,16 +4,17 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DeckStorage
+public class DeckStorage implements Storage<Deck>
 {
     private static final String FILE_NAME = "decks.csv";
 
-    public static void save(List<Deck> decks) throws IOException {
+    @Override
+    public void save(List<Deck> decks) throws IOException {
         try (PrintWriter writer = new PrintWriter(new FileWriter(FILE_NAME)))
         {
             writer.println("DeckName,Description");
 
-            for (Deck deck: decks)
+            for (Deck deck : decks)
             {
                 String name = deck.getName().replace(",", " ");
                 String description = deck.getDescription().replace(",", " ")
@@ -28,7 +29,8 @@ public class DeckStorage
         }
     }
 
-    public static List<Deck> load() {
+    @Override
+    public List<Deck> load() {
         List<Deck> decks = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME))) {
@@ -49,10 +51,9 @@ public class DeckStorage
             }
 
         } catch (Exception e) {
-            // file could not exist
+            // file may not exist yet
         }
 
         return decks;
     }
-
 }

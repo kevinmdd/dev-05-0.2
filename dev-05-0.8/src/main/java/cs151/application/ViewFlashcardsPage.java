@@ -17,10 +17,12 @@ import java.util.List;
 public class ViewFlashcardsPage
 {
     private final TableView<Flashcard> table = new TableView<>();
+    private final FlashcardStorage flashcardStorage = new FlashcardStorage();
+
 
     public void start(Stage stage)
     {
-        List<Flashcard> flashcards = FlashcardStorage.load();
+        List<Flashcard> flashcards = flashcardStorage.load();
 
         flashcards.sort(Comparator.comparing(Flashcard::getCreationDate).reversed());
 

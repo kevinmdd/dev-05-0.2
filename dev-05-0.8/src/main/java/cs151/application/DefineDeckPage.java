@@ -24,6 +24,7 @@ public class DefineDeckPage {
     private List<Deck> decks = new ArrayList<>();
     private final ListView<String> deckListView = new ListView<>();
     private final BorderPane root = new BorderPane();
+    private final DeckStorage deckStorage = new DeckStorage();
 
     private TextField deckNameField;
     private TextArea descriptionArea;
@@ -34,7 +35,7 @@ public class DefineDeckPage {
      * @param stage the stage used to display the page
      */
     public void start(Stage stage) {
-        decks = DeckStorage.load();
+        decks = deckStorage.load();
         showForm();
 
         Scene scene = new Scene(root, 700, 500);
@@ -169,7 +170,8 @@ public class DefineDeckPage {
 
         decks.add(new Deck(name, description));
 
-        DeckStorage.save(decks); // ← clean separation
+        DeckStorage deckStorage = new DeckStorage();
+        deckStorage.save(decks); // ← clean separation
 
         deckNameField.clear();
         descriptionArea.clear();

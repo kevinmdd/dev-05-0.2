@@ -5,12 +5,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-
-public class FlashcardStorage {
-
+public class FlashcardStorage implements Storage<Flashcard>
+{
     private static final String FILE_NAME = "flashcards.csv";
 
-    public static void save(List<Flashcard> flashcards) throws IOException {
+    @Override
+    public void save(List<Flashcard> flashcards) throws IOException {
         try (PrintWriter writer = new PrintWriter(new FileWriter(FILE_NAME))) {
 
             writer.println("Deck,Front,Back,Status,CreationDate,LastReviewDate");
@@ -36,12 +36,14 @@ public class FlashcardStorage {
         }
     }
 
-    public static List<Flashcard> load() {
+    @Override
+    public List<Flashcard> load() {
         List<Flashcard> flashcards = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME))) {
 
-            List<Deck> decks = DeckStorage.load();
+            DeckStorage deckStorage = new DeckStorage();
+            List<Deck> decks = deckStorage.load();
 
             String line;
             boolean firstLine = true;
@@ -71,15 +73,10 @@ public class FlashcardStorage {
                 }
 
                 if (matchedDeck != null) {
-                    Flashcard flashcard = new Flashcard(
-                            matchedDeck,
-                            front,
-                            back,
-                            status,
-                            creationDate,
-                            lastReviewDate
-                    );
-                    flashcards.add(flashcard);
+                    flashcards.add(new Flashcard(
+                            matchedDeck, front, back, status,
+                            creationDate, lastReviewDate
+                    ));
                 }
             }
 
@@ -89,20 +86,19 @@ public class FlashcardStorage {
 
         return flashcards;
     }
-    
-    public static void delete(Flashcard targetFlashcard) throws IOException {
-    List<Flashcard> flashcards = load();
 
-    flashcards.removeIf(flashcard ->
-            flashcard.getDeck().getName().equalsIgnoreCase(targetFlashcard.getDeck().getName()) &&
-            flashcard.getFrontText().equalsIgnoreCase(targetFlashcard.getFrontText()) &&
-            flashcard.getBackText().equalsIgnoreCase(targetFlashcard.getBackText()));
+    public void delete(Flashcard targetFlashcard) throws IOException {
+        List<Flashcard> flashcards = load();
 
-    save(flashcards);
+        flashcards.removeIf(flashcard ->
+                flashcard.getDeck().getName().equalsIgnoreCase(targetFlashcard.getDeck().getName()) &&
+                        flashcard.getFrontText().equalsIgnoreCase(targetFlashcard.getFrontText()) &&
+                        flashcard.getBackText().equalsIgnoreCase(targetFlashcard.getBackText()));
 
+        save(flashcards);
+    }
 
-}
-    public static void deleteByDeck(String deckName) throws IOException {
+    public void deleteByDeck(String deckName) throws IOException {
         List<Flashcard> flashcards = load();
 
         flashcards.removeIf(flashcard ->
@@ -111,7 +107,7 @@ public class FlashcardStorage {
         save(flashcards);
     }
 
-    public static void updateDeckReference(String oldDeckName, Deck updatedDeck) throws IOException {
+    public void updateDeckReference(String oldDeckName, Deck updatedDeck) throws IOException {
         List<Flashcard> flashcards = load();
 
         for (Flashcard flashcard : flashcards) {

@@ -29,13 +29,13 @@ public class DefineFlashcardPage
     private ComboBox<String> statusComboBox;
     private Label errorLabel;
     private Label successLabel;
+    private final DeckStorage deckStorage = new DeckStorage();
+    private final FlashcardStorage flashcardStorage = new FlashcardStorage();
 
 
-    public void start(Stage stage)
-    {
-        decks = DeckStorage.load();
-        flashcards = FlashcardStorage.load();
-
+    public void start(Stage stage) throws IOException {
+        decks = deckStorage.load();
+        flashcards = flashcardStorage.load();
         showForm();
 
         Scene scene = new Scene(root, 750, 600);
@@ -196,7 +196,7 @@ public class DefineFlashcardPage
         );
 
         flashcards.add(flashcard);
-        FlashcardStorage.save(flashcards);
+        flashcardStorage.save(flashcards);
 
         clearForm();
         showSuccess("Flashcard saved successfully.");

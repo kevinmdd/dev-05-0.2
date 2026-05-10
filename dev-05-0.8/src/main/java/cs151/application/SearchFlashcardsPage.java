@@ -20,10 +20,12 @@ public class SearchFlashcardsPage
 {
     private final TableView<Flashcard> table = new TableView<>();
     private ObservableList<Flashcard> data;
+    private final FlashcardStorage flashcardStorage = new FlashcardStorage();
+
 
     public void start(Stage stage)
     {
-        List<Flashcard> flashcards = FlashcardStorage.load();
+        List<Flashcard> flashcards = flashcardStorage.load();
         data = FXCollections.observableArrayList(flashcards);
 
         TextField searchField = new TextField();
@@ -104,7 +106,7 @@ public class SearchFlashcardsPage
             }
 
             try {
-                FlashcardStorage.delete(selected);
+                flashcardStorage.delete(selected);
                 data.remove(selected);
             } catch (IOException ex) {
                 showAlert("Could not delete flashcard.");
@@ -198,7 +200,7 @@ public class SearchFlashcardsPage
         flashcard.updateLastReviewDate();
 
         try {
-            FlashcardStorage.save(data);
+            flashcardStorage.save(data);
             table.refresh();
         } catch (IOException e) {
             showAlert("Failed to save changes.");

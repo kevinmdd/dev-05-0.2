@@ -19,9 +19,11 @@ public class ViewDecksPage {
 
     private final TableView<Deck> table = new TableView<>();
     private ObservableList<Deck> data;
+    private final DeckStorage deckStorage = new DeckStorage();
+    private final FlashcardStorage flashcardStorage = new FlashcardStorage();
 
     public void start(Stage stage) {
-        List<Deck> decks = DeckStorage.load();
+        List<Deck> decks = deckStorage.load();
         decks.sort(Comparator.comparing(d -> d.getName().toLowerCase()));
 
         data = FXCollections.observableArrayList(decks);
@@ -138,10 +140,10 @@ public class ViewDecksPage {
 
             try {
                 // Update linked flashcards first, while old deck name still exists in storage
-                FlashcardStorage.updateDeckReference(oldName, selectedDeck);
+                flashcardStorage.updateDeckReference(oldName, selectedDeck);
 
                 // Then save decks permanently
-                DeckStorage.save(data);
+                deckStorage.save(data);
 
                 sortAndRefresh();
                 table.refresh();
@@ -165,10 +167,10 @@ public class ViewDecksPage {
         if (result.isPresent() && result.get() == ButtonType.OK) {
             try {
                 // Delete linked flashcards first, before the deck disappears from deck storage
-                FlashcardStorage.deleteByDeck(selectedDeck.getName());
+                flashcardStorage.deleteByDeck(selectedDeck.getName());
 
                 data.remove(selectedDeck);
-                DeckStorage.save(data);
+                deckStorage.save(data);
 
                 table.refresh();
                 showInfo("Deck and linked flashcards deleted successfully.");
